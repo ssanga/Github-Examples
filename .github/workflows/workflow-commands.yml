@@ -21,6 +21,12 @@ jobs:
      - name: "Prints value from var"
        run: |
         echo $MY_VAL
+     - name: "Add directory to PATH"
+       run: |
+        echo "/myscripts/scrip.sh" >> $GITHUB_PATH
+     - name: Check new path
+       run: |
+        echo $PATH
         
 
 
