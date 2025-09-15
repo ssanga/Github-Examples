@@ -31,4 +31,4 @@ jobs:
        id: example_step
        run: echo "result=output_value" >> $GITHUB_OUTPUT
      - name: "Set output variable in step"
-       run: echo "The output was ${{steps.example_step.outputs.result}}
+       run: echo "The output was ${{steps.example_step.outputs.result}}"
