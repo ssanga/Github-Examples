@@ -13,3 +13,51 @@ jobs:
       env: 
         MY_ACTION: ${{github.action}}
         MY_ACTOR: ${{github.actor}}
+    
+    - name: "Repository Info"
+      run: |
+        echo "Repository: $REPO_NAME"
+        echo "Repository Owner: $REPO_OWNER"
+      env:
+        REPO_NAME: ${{ github.repository }}
+        REPO_OWNER: ${{ github.repository_owner }}
+    
+    - name: "Event Information"
+      run: |
+        echo "Event Name: $EVENT_NAME"
+        echo "Event Type: $EVENT_TYPE"
+      env:
+        EVENT_NAME: ${{ github.event_name }}
+        EVENT_TYPE: ${{ github.event.action }}
+    
+    - name: "Branch and Commit Info"
+      run: |
+        echo "Branch/Ref: $REF_NAME"
+        echo "Commit SHA: $COMMIT_SHA"
+      env:
+        REF_NAME: ${{ github.ref_name }}
+        COMMIT_SHA: ${{ github.sha }}
+    
+    - name: "Workflow Information"
+      run: |
+        echo "Workflow: $WORKFLOW_NAME"
+        echo "Run ID: $RUN_ID"
+      env:
+        WORKFLOW_NAME: ${{ github.workflow }}
+        RUN_ID: ${{ github.run_id }}
+    
+    - name: "Job and Runner Info"
+      run: |
+        echo "Job: $JOB_NAME"
+        echo "Runner OS: $RUNNER_OS"
+      env:
+        JOB_NAME: ${{ github.job }}
+        RUNNER_OS: ${{ runner.os }}
+    
+    - name: "Workspace and Token"
+      run: |
+        echo "Workspace: $WORKSPACE_PATH"
+        echo "Token exists: $TOKEN_EXISTS"
+      env:
+        WORKSPACE_PATH: ${{ github.workspace }}
+        TOKEN_EXISTS: ${{ secrets.GITHUB_TOKEN != '' }}
