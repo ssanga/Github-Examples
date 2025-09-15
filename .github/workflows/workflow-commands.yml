@@ -24,9 +24,14 @@ jobs:
      - name: "Add directory to PATH"
        run: |
         echo "/myscripts/scrip.sh" >> $GITHUB_PATH
-     - name: Check new path
+     - name: "Check new path"
        run: |
         echo $PATH
+     - name: "Set output variable in step"
+       id: example_step
+       run: echo "result=output_value" >> $GITHUB_OUTPUT
+     - name: "Set output variable in step"
+       run: echo "The output was ${{steps.example_step.outputs.result}}
         
 
 
