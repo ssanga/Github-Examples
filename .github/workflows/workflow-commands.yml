@@ -15,5 +15,12 @@ jobs:
         echo "Message 1"
         echo "Message 2"
         echo "::endgroup::"
+     - name: "Assigns hello value to GITHUB_ENV"
+       run: |
+        echo "MY_VAL=hello" >> $GITHUB_ENV
+     - name: "Prints value from var"
+       run: |
+        echo $MY_VAL
+        
 
 
