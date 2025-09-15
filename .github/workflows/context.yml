@@ -6,8 +6,10 @@ jobs:
  my-context-job:
   runs-on: ubuntu-latest
   steps:
-    - name: "My step"
-      run: echo "Hello! {github.action}"
-
-
-
+    - name: "My step 1"
+      run: echo "Hello! {MY_ACTION}"
+    - name: "My step 2"
+      run: echo "Hello! {MY_ACTOR}"
+      env: 
+        MY_ACTION: ${{github.action}}
+        MY_ACTOR: ${{github.actor}}
