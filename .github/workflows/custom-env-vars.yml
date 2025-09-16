@@ -6,7 +6,7 @@ env:
  DAY_OF_WEEK: Monday
 
 jobs: 
- greetings_jon:
+ greetings_job:
   runs-on: ubuntu-latest
   env:
     Greeting: Hello
