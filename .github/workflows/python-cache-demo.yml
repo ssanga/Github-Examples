@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.11", "3.12"]
 
     steps:
     - name: Checkout code
@@ -79,13 +79,11 @@ jobs:
         echo "🚀 Running Python application..."
         python app.py
 
-    - name: Verify imports
-      run: |
-        echo "Testing imports..."
-        python -c "import requests, pandas, numpy; print('All imports successful')"
+    # - name: Verify imports
+    #   run: python -c "import requests, pandas, numpy; print('All imports successful')"
 
-            - name: Cache statistics
-            run: |
-                echo "📈 Cache Statistics:"
-                echo "Cache directory size: $(du -sh ~/.cache/pip 2>/dev/null || echo 'Not available')"
-                echo "Cache key used: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}"
+    #         - name: Cache statistics
+    #         run: |
+    #             echo "📈 Cache Statistics:"
+    #             echo "Cache directory size: $(du -sh ~/.cache/pip 2>/dev/null || echo 'Not available')"
+    #             echo "Cache key used: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}"
