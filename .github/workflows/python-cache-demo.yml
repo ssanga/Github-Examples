@@ -1,0 +1,102 @@
+name: Python Cache Demo
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  python-cache-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Display cache key components
+      run: |
+        echo "🔑 Cache Key Components:"
+        echo "Runner OS: ${{ runner.os }}"
+        echo "Python Version: ${{ matrix.python-version }}"
+        echo "Requirements file hash will be: $(python -c "import hashlib; print(hashlib.sha256(open('requirements.txt', 'rb').read()).hexdigest()[:8])")"
+        echo ""
+        echo "📝 Full cache key will be: ${{ runner.os }}-pip-${{ matrix.python-version }}-$(python -c "import hashlib; print(hashlib.sha256(open('requirements.txt', 'rb').read()).hexdigest())")"
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      id: cache-pip
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-${{ matrix.python-version }}-
+          ${{ runner.os }}-pip-
+
+    - name: Check cache status
+      run: |
+        if [ "${{ steps.cache-pip.outputs.cache-hit }}" == "true" ]; then
+          echo "🎯 Cache HIT! Dependencies restored from cache"
+          echo "⚡ This should be faster than the first run"
+        else
+          echo "❌ Cache MISS! Will download and install dependencies"
+          echo "🐌 This will take longer (first run or requirements changed)"
+        fi
+
+    - name: Install dependencies (with timing)
+      run: |
+        echo "⏱️ Starting dependency installation at: $(date)"
+        start_time=$(date +%s)
+        
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+        end_time=$(date +%s)
+        duration=$((end_time - start_time))
+        echo "⏱️ Installation completed in: ${duration} seconds"
+        
+        if [ "${{ steps.cache-pip.outputs.cache-hit }}" == "true" ]; then
+          echo "📊 This was a CACHED installation"
+        else
+          echo "📊 This was a FRESH installation (will be cached for next time)"
+        fi
+
+    - name: Display installed packages
+      run: |
+        echo "📦 Installed packages:"
+        pip list
+
+    - name: Run Python application
+      run: |
+        echo "🚀 Running Python application..."
+        python app.py
+
+    - name: Run basic tests
+      run: |
+        echo "🧪 Running basic tests..."
+        python -c "
+        import sys
+        import requests
+        import pandas as pd
+        import numpy as np
+
+        print('✅ All imports successful!')
+        print(f'🐍 Python version: {sys.version}')
+        print(f'📊 Pandas version: {pd.__version__}')
+        print(f'🔢 NumPy version: {np.__version__}')
+        print(f'🌐 Requests version: {requests.__version__}')
+        "
+
+            - name: Cache statistics
+            run: |
+                echo "📈 Cache Statistics:"
+                echo "Cache directory size: $(du -sh ~/.cache/pip 2>/dev/null || echo 'Not available')"
+                echo "Cache key used: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}"
