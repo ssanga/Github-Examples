@@ -82,18 +82,7 @@ jobs:
     - name: Run basic tests
       run: |
         echo "🧪 Running basic tests..."
-        python -c "
-        import sys
-        import requests
-        import pandas as pd
-        import numpy as np
-
-        print('✅ All imports successful!')
-        print(f'🐍 Python version: {sys.version}')
-        print(f'📊 Pandas version: {pd.__version__}')
-        print(f'🔢 NumPy version: {np.__version__}')
-        print(f'🌐 Requests version: {requests.__version__}')
-        "
+        python -c "import sys, requests, pandas as pd, numpy as np; print('✅ All imports successful!')"
 
             - name: Cache statistics
             run: |
