@@ -9,36 +9,34 @@ on:
 jobs:
   python-cache-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11", "3.12"]
+
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.11"
 
     - name: Display cache key components
       run: |
         echo "🔑 Cache Key Components:"
         echo "Runner OS: ${{ runner.os }}"
-        echo "Python Version: ${{ matrix.python-version }}"
+        echo "Python Version: 3.11"
         echo "Requirements file hash will be: $(python -c "import hashlib; print(hashlib.sha256(open('requirements.txt', 'rb').read()).hexdigest()[:8])")"
         echo ""
-        echo "📝 Full cache key will be: ${{ runner.os }}-pip-${{ matrix.python-version }}-$(python -c "import hashlib; print(hashlib.sha256(open('requirements.txt', 'rb').read()).hexdigest())")"
+        echo "📝 Full cache key will be: ${{ runner.os }}-pip-3.11-$(python -c "import hashlib; print(hashlib.sha256(open('requirements.txt', 'rb').read()).hexdigest())")"
 
     - name: Cache pip dependencies
       uses: actions/cache@v4
       id: cache-pip
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}
+        key: ${{ runner.os }}-pip-3.11-${{ hashFiles('requirements.txt') }}
         restore-keys: |
-          ${{ runner.os }}-pip-${{ matrix.python-version }}-
+          ${{ runner.os }}-pip-3.11-
           ${{ runner.os }}-pip-
 
     - name: Check cache status
@@ -86,4 +84,4 @@ jobs:
     #         run: |
     #             echo "📈 Cache Statistics:"
     #             echo "Cache directory size: $(du -sh ~/.cache/pip 2>/dev/null || echo 'Not available')"
-    #             echo "Cache key used: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}"
+    #             echo "Cache key used: ${{ runner.os }}-pip-3.11-${{ hashFiles('requirements.txt') }}"
