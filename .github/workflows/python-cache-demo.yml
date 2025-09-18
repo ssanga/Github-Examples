@@ -79,10 +79,10 @@ jobs:
         echo "🚀 Running Python application..."
         python app.py
 
-    - name: Run basic tests
+    - name: Verify imports
       run: |
-        echo "🧪 Running basic tests..."
-        python -c "import sys, requests, pandas as pd, numpy as np; print('✅ All imports successful!')"
+        echo "Testing imports..."
+        python -c "import requests, pandas, numpy; print('All imports successful')"
 
             - name: Cache statistics
             run: |
